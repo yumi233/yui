@@ -38,6 +38,9 @@
   [data-theme="night"] .lib-ascii { filter: invert(.9) hue-rotate(180deg); }
   @media (max-width: 720px) { .spec[style*="span 2"] { grid-column: auto !important; } }
   .lib-dialog { position: relative; inset: auto; width: 100%; max-height: none; }
+  .lib-works { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); align-items: start; gap: 24px; margin-bottom: 24px; }
+  .lib-pond { border-radius: var(--radius-md); background: var(--paper); cursor: crosshair; touch-action: manipulation; }
+  @media (max-width: 720px) { .lib-works { grid-template-columns: minmax(0, 1fr); } }
   @media (max-width: 720px) { .type-row { grid-template-columns: 1fr; gap: 4px; } }
 </style>
 </head>
@@ -55,7 +58,7 @@
     <a class="yui-link" href="#color">01 颜色</a><a class="yui-link" href="#type">02 文字</a><a class="yui-link" href="#space">03 间距与圆角</a>
     <a class="yui-link" href="#button">04 按钮</a><a class="yui-link" href="#field">05 输入</a><a class="yui-link" href="#choice">06 选择</a>
     <a class="yui-link" href="#label">07 标记</a><a class="yui-link" href="#surface">08 容器</a><a class="yui-link" href="#feedback">09 反馈</a>
-    <a class="yui-link" href="#overlay">10 浮层</a>
+    <a class="yui-link" href="#overlay">10 浮层</a><a class="yui-link" href="#ascii">11 字符</a>
   </nav>
 
   <section class="lib-section" id="color">
@@ -215,12 +218,39 @@
     </div>
   </section>
 
+  <section class="lib-section" id="ascii">
+    <h2><span class="yui-index">11</span>字符</h2>
+    <div class="lib-works">
+      <div class="spec"><code>.yui-catalog · .yui-leader</code>
+        <div class="yui-catalog" role="tablist" aria-orientation="vertical" aria-label="作品" data-demo-catalog>
+          <button class="yui-catalog__row" type="button" role="tab" aria-selected="true" aria-controls="demoPlate"><span class="yui-index">001</span><span class="yui-catalog__name">圈椅</span><span class="yui-leader" aria-hidden="true"></span><span class="yui-catalog__meta">家具</span><span class="yui-date">2026</span></button>
+          <button class="yui-catalog__row" type="button" role="tab" aria-selected="false" aria-controls="demoPlate" tabindex="-1"><span class="yui-index">002</span><span class="yui-catalog__name">茶台</span><span class="yui-leader" aria-hidden="true"></span><span class="yui-catalog__meta">家具</span><span class="yui-date">2026</span></button>
+          <button class="yui-catalog__row" type="button" role="tab" aria-selected="false" aria-controls="demoPlate" tabindex="-1"><span class="yui-index">003</span><span class="yui-catalog__name">竹</span><span class="yui-leader" aria-hidden="true"></span><span class="yui-catalog__meta">影片</span><span class="yui-date">2026</span></button>
+        </div>
+        <div class="yui-segmented" role="group" aria-label="字阶" data-demo-segment data-demo-ramp><button class="yui-segment" type="button" aria-pressed="true" data-ramp="han">木林森</button><button class="yui-segment" type="button" aria-pressed="false" data-ramp="ascii">ASCII</button></div>
+      </div>
+      <figure class="yui-plate" id="demoPlate" role="tabpanel">
+        <div class="yui-plate__sheet"><div class="yui-ascii" id="demoDrawing" role="img" aria-label="字符排成的圈椅"></div></div>
+        <figcaption class="yui-plate__caption"><span class="yui-index" id="demoPlateIndex">001</span><span class="yui-plate__title" id="demoPlateTitle">圈椅</span><span class="yui-plate__note">.yui-plate · 20 − 8 = 12</span><span class="yui-plate__meta">mountAscii(host, { source })</span></figcaption>
+      </figure>
+    </div>
+    <div class="lib-grid">
+      <div class="spec"><code>.yui-ascii[data-reveal] · 悬停、聚焦或点按显影</code>
+        <div class="yui-ascii" data-reveal><img alt="山与落日" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23EFE9DC'/%3E%3Ccircle cx='286' cy='92' r='38' fill='%23A98D63'/%3E%3Cpath d='M150 300 290 150 400 262V300Z' fill='%238FA876'/%3E%3Cpath d='M0 300V250L130 110 300 300Z' fill='%235F7044'/%3E%3C/svg%3E" /></div>
+      </div>
+      <div class="spec"><code>mountAscii(host, { paint }) · 点一下落墨</code>
+        <div class="yui-ascii lib-pond" id="demoPond" role="img" aria-label="字符排成的 yui，点一下落墨"></div>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <script type="module">
-  // Both modules set themselves up on import (selects become pickers, groups get the sliding highlight).
+  // The modules set themselves up on import (selects become pickers, groups get the sliding highlight, pictures in .yui-ascii are set in type).
   import "./dist/fluid-motion.js";
   import "./dist/select.js";
+  import { mountAscii, fieldOf } from "./dist/ascii.js";
   const html = document.documentElement;
   const tokens = [["--paper", "页面底"], ["--surface", "卡片"], ["--line", "边框"], ["--ink", "正文"], ["--sub", "次要"], ["--muted-bg", "凹槽"], ["--olive", "唯一强调"], ["--sage", "辅助绿"], ["--sage-soft", "浅绿底"], ["--btn", "主按钮"], ["--danger", "危险"]];
   const box = document.getElementById("swatches");
@@ -236,6 +266,84 @@
     group.addEventListener("click", event => { const hit = event.target.closest("button"); if (!hit) return; for (const b of group.children) b.setAttribute(attr, String(b === hit)); });
   }
   document.querySelector("[data-demo-chips]").addEventListener("click", event => { const hit = event.target.closest("button"); if (hit) hit.dataset.active = String(hit.dataset.active !== "true"); });
+
+  // Drawings are made on a 100 × 64 sheet, white on black; mountAscii hands over the real pixel size.
+  const onSheet = draw => (o, width, height) => { const s = Math.min(width / 100, height / 64); o.translate((width - 100 * s) / 2, (height - 64 * s) / 2); o.scale(s, s); draw(o); };
+  const bar = (o, x, y, w, h, alpha = 1) => { o.globalAlpha = alpha; o.fillRect(x, y, w, h); };
+  const path = (o, points, width, alpha = 1) => { o.globalAlpha = alpha; o.lineWidth = width; o.beginPath(); o.moveTo(points[0], points[1]); for (let i = 2; i < points.length; i += 2) o.lineTo(points[i], points[i + 1]); width ? o.stroke() : o.fill(); };
+  const oval = (o, x, y, rx, ry, alpha = 1) => { o.globalAlpha = alpha; o.beginPath(); o.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2); o.fill(); };
+  const drawings = [
+    onSheet(o => { // 圈椅
+      oval(o, 50, 60.5, 25, 2, .25); bar(o, 34, 8, 2.6, 30, .9); bar(o, 63.4, 8, 2.6, 30, .9);
+      o.globalAlpha = 1; o.lineWidth = 3.2; o.beginPath(); o.moveTo(30, 10); o.quadraticCurveTo(50, 3, 70, 10); o.stroke();
+      bar(o, 46, 8, 8, 28, .55); path(o, [35, 22, 29, 24, 29, 36], 2.2, .9); path(o, [65, 22, 71, 24, 71, 36], 2.2, .9);
+      bar(o, 27, 36, 46, 4.5); bar(o, 29, 40.5, 42, 2, .5); bar(o, 28, 40, 3, 19, .95); bar(o, 69, 40, 3, 19, .95); bar(o, 31, 52, 38, 1.6, .7); bar(o, 30, 56, 40, 2.2, .85);
+    }),
+    onSheet(o => { // 茶台
+      path(o, [54, 13, 70, 13, 86, 40, 38, 40], 0, .12); path(o, [62, 0, 62, 9], 1, .7); path(o, [54, 13, 70, 13, 67, 9, 57, 9], 0, .95);
+      bar(o, 14, 40, 72, 3.6); bar(o, 18, 43.6, 3, 17, .9); bar(o, 79, 43.6, 3, 17, .9); bar(o, 21, 54, 58, 1.4, .6);
+      oval(o, 38, 34.4, 6.5, 4.8, .95); path(o, [44, 34, 49, 31], 1.8, .95); bar(o, 35.5, 28.6, 5, 1.2, .9);
+      for (const x of [54, 61, 68]) bar(o, x, 36.4, 4, 3, .9);
+      bar(o, 6, 61, 88, .8, .35);
+    }),
+    onSheet(o => { // 竹
+      oval(o, 76, 18, 8, 8, .5);
+      for (const [x, w, alpha, shift] of [[28, 4.5, .85, 3], [43, 5.5, 1, 9], [59, 3.5, .7, 6]]) {
+        bar(o, x, 2, w, 60, alpha);
+        for (let y = 10 + shift; y < 60; y += 15) { bar(o, x - .8, y, w + 1.6, 1.4); o.fillStyle = "#000"; bar(o, x - .8, y + 1.4, w + 1.6, 1.1); o.fillStyle = "#fff"; }
+        path(o, [x + w, 13 + shift, x + w + 9, 8 + shift], 1.5, .8); path(o, [x + w, 13 + shift, x + w + 10, 14 + shift], 1.5, .6); path(o, [x, 28 + shift, x - 8, 23 + shift], 1.5, .7);
+      }
+    }),
+  ];
+  const drawing = document.getElementById("demoDrawing");
+  const plate = mountAscii(drawing, { source: drawings[0] });
+  const catalog = document.querySelector("[data-demo-catalog]");
+  const choose = row => {
+    if (row.getAttribute("aria-selected") === "true") return;
+    for (const other of catalog.children) { other.setAttribute("aria-selected", String(other === row)); other.tabIndex = other === row ? 0 : -1; }
+    const name = row.querySelector(".yui-catalog__name").textContent;
+    document.getElementById("demoPlateIndex").textContent = row.querySelector(".yui-index").textContent;
+    document.getElementById("demoPlateTitle").textContent = name;
+    drawing.setAttribute("aria-label", `字符排成的${name}`);
+    plate.set({ source: drawings[[...catalog.children].indexOf(row)] });
+  };
+  for (const type of ["click", "focusin", "pointerover"]) catalog.addEventListener(type, event => { const row = event.target.closest(".yui-catalog__row"); if (row) choose(row); });
+  catalog.addEventListener("keydown", event => {
+    if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
+    event.preventDefault();
+    const rows = [...catalog.children];
+    rows[(rows.indexOf(document.activeElement) + (event.key === "ArrowDown" ? 1 : rows.length - 1)) % rows.length].focus();
+  });
+  document.querySelector("[data-demo-ramp]").addEventListener("click", event => {
+    const ramp = event.target.closest("button")?.dataset.ramp;
+    if (ramp) for (const host of document.querySelectorAll(".yui-ascii")) fieldOf(host)?.set({ ramp });
+  });
+
+  // A moving field: the letters are the source, the water and the rings are painted over them every frame.
+  const pond = document.getElementById("demoPond");
+  const still = matchMedia("(prefers-reduced-motion: reduce)");
+  const drops = [];
+  const water = mountAscii(pond, {
+    rows: 12,
+    settle: false,
+    source: (o, width, height) => { o.font = `800 ${height * .72}px Inter, -apple-system, sans-serif`; o.textAlign = "center"; o.textBaseline = "middle"; o.fillText("yui", width / 2, height * .46); },
+    paint({ cols, rows, time, density, value, tone }) {
+      for (let y = 0, i = 0; y < rows; y++) for (let x = 0; x < cols; x++, i++) {
+        let ring = 0;
+        for (const drop of drops) { const age = time - drop.time, k = Math.hypot(x - drop.x, y - drop.y) - age * 8; ring += Math.exp(-age * .55) * Math.exp(-(k * k) / 8) * Math.cos(k * .8); }
+        const letter = density[i] > .1;
+        value[i] = letter ? .4 + .6 * density[i] + ring * .3 : .1 + .08 * Math.sin(x * .2 + y * .3 + time * .4) + Math.max(0, ring) * .8;
+        tone[i] = ring > .3 ? 2 : letter ? 1 : 0;
+      }
+    },
+  });
+  pond.addEventListener("pointerdown", event => {
+    const [x, y] = water.cellAt(event);
+    // With motion reduced nothing animates, so the ring is shown already a second old.
+    drops.push({ x, y, time: performance.now() / 1000 - (still.matches ? 1 : 0) });
+    if (drops.length > 8) drops.shift();
+    water.draw();
+  });
 </script>
 </body>
 </html>
