@@ -1224,3 +1224,32 @@ input[type="file"]::file-selector-button { height: 36px; margin-right: 12px; pad
 .locale-switch { flex: none; grid-auto-columns: auto; }
 .locale-switch .yui-segment { min-width: 36px; min-height: 32px; padding: 0 8px; font: 600 12px/1 var(--font-sans); }
 .locale-switch .yui-segment[lang="en"] { font-family: var(--font-mono); }
+
+/* Catalogue and plate: a numbered list beside the sheet that shows the chosen entry.
+   Plate 20 − inset 8 = sheet 12; rows are 12 with 12 padding. */
+.yui-catalog { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-1); }
+.yui-catalog__row { display: flex; align-items: baseline; gap: var(--space-3); width: 100%; min-height: var(--control-xl); padding: var(--space-3); border: 0; border-radius: var(--radius-md); background: transparent; color: var(--ink); font: inherit; text-align: left; text-decoration: none; cursor: pointer; transition: background var(--motion-base) var(--ease-standard), box-shadow var(--motion-base) var(--ease-standard); }
+.yui-catalog__row:hover { background: var(--muted-bg); }
+.yui-catalog__row:is([aria-selected="true"], [aria-current]) { background: var(--surface); box-shadow: var(--shadow-sm); }
+.yui-catalog__name { overflow: hidden; font-size: var(--text-lg); font-weight: 650; text-overflow: ellipsis; white-space: nowrap; }
+.yui-catalog__meta { color: var(--sub); font-size: 13px; white-space: nowrap; }
+.yui-leader { flex: 1; min-width: var(--space-4); overflow: hidden; color: color-mix(in srgb, var(--sub) 45%, transparent); font-family: var(--font-mono); white-space: nowrap; }
+.yui-leader::before { content: "················································································································································"; }
+.yui-plate { margin: 0; padding: var(--space-2); border: 1px solid var(--line); border-radius: var(--radius-xl); background: var(--surface); box-shadow: var(--shadow-sm); }
+.yui-plate__sheet { overflow: hidden; border-radius: var(--radius-md); background: var(--paper); }
+.yui-plate__caption { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2) var(--space-3); padding: var(--space-3) var(--space-2) var(--space-1); }
+.yui-plate__title { font-weight: 650; }
+.yui-plate__note { color: var(--sub); }
+.yui-plate__meta { margin-left: auto; color: var(--sub); font: 13px/1.6 var(--font-mono); }
+
+/* Pictures set in type by the ascii script. Until it has read the picture, or if it cannot, the plain picture shows. */
+.yui-ascii { position: relative; display: block; overflow: hidden; }
+.yui-ascii:focus-visible { outline: 2px solid var(--ring); outline-offset: 4px; }
+.yui-ascii > img { display: block; width: 100%; height: auto; }
+.yui-ascii > canvas { display: block; margin-inline: auto; }
+.yui-ascii:not([data-ascii="ready"]) > canvas { display: none; }
+.yui-ascii[data-ascii="ready"] > img { position: absolute; inset: 0; height: 100%; object-fit: cover; opacity: 0; transition: opacity var(--motion-slow) var(--ease-standard); }
+.yui-ascii[data-ascii="ready"]:not([data-reveal]) > img { visibility: hidden; }
+.yui-ascii[data-reveal]:is(:hover, :focus-visible, [data-revealed="true"]) > img,
+:is(a, button):focus-visible .yui-ascii[data-reveal] > img { opacity: 1; }
+
