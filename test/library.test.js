@@ -64,3 +64,9 @@ test("ascii stretch spreads a flat picture over the whole ramp and leaves an eve
   assert.ok(Math.abs(flat[50] - 0.5) < 0.02);
   assert.deepEqual([...stretch(Float32Array.of(0.5, 0.5, 0.52))].map((v) => +v.toFixed(2)), [0.5, 0.5, 0.52]);
 });
+
+test("a paused field stops asking for frames", () => {
+  const live = read("dist/ascii.js").match(/const live = \(\) => (.+);/)[1];
+  assert.match(live, /!state\.paused/);
+  assert.match(live, /!reduced\?\.matches/);
+});

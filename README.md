@@ -65,6 +65,7 @@ const field = mountAscii(host, {
   paint: ({ cols, rows, time, density, value, tone }) => { /* 每帧给每个格子写 value（0–1）和 tone（0 淡、1 墨、2 强调） */ },
 });
 field.set({ ramp: "ascii" }); // 也可以换 source、cell、rows
+field.set({ paused: true });  // 会动的画面停在当前这一帧；之后 draw() 只画一帧
 ```
 
 规则见 [docs/RULES.md](docs/RULES.md) 第 10 节。
