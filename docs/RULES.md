@@ -67,6 +67,9 @@
 | 空态 | `.yui-empty-state` | 一句话 + 一个动作 |
 | 对话框 | 原生 `<dialog>` + `.yui-dialog`（`__header/__body/__footer`） | Esc 关闭、焦点回到打开它的按钮 |
 | 浮动栏 | `.yui-dock` | 磨砂胶囊；不遮挡主输入 |
+| 目录 | `.yui-catalog` > `.yui-catalog__row`（`.yui-index` + `__name` + `.yui-leader` + `__meta` + `.yui-date`） | 作品、文章这类带编号的清单；当前项用 `aria-selected` 或 `aria-current`；引导点是装饰，加 `aria-hidden` |
+| 图版 | `.yui-plate` > `.yui-plate__sheet` + `.yui-plate__caption`（`__title/__note/__meta`） | 一次只展示一件；图版 20、内边距 8 → 纸面 12 |
+| 字符画面 | `.yui-ascii`（`[data-ramp=han\|ascii]`、`[data-reveal]`），引入 `ascii.js` | 见第 10 节 |
 | 语言切换 | `.yui-segmented.locale-switch` | 放在每页顶栏，显示当前语言；切换后在 `window` 派发 `yui:refresh`，让下拉刷新文字 |
 
 新组件先在 yui 的 `components.css` 写成 `yui-*`，再加进组件库页面，发版后项目才使用。
@@ -96,3 +99,13 @@
 1. 桌面 1440 与手机（iPhone 宽度）各截一次图，日夜都看。
 2. 无横向滚动、无文字截断、无控制台错误。
 3. 改 yui 本身时，组件库页面全部组件都要检查，并运行 `npm test`。
+
+## 10. 字符画面
+
+- **只有三种颜色**：`--sub`（淡）、`--ink`（墨）、`--olive`（刚落定或被强调的字）。不为字符另加颜色，夜间跟随主题变量。
+- **两套字阶**：`han`（丶一二十木林森，默认）和 `ascii`。项目可以传自己的字阶，从空白排到最密，第一个字符不画。
+- **深色是墨**：图片默认把深色读成字，适合浅底的照片和产品图；用函数画的图形白色是墨。需要反过来时传 `ink`。
+- **原图不能丢**：`<img>` 必须有 `alt`。加 `data-reveal` 后悬停、聚焦、触屏点按都能看到原图。用函数画的画面给容器加 `role="img"` 和 `aria-label`。
+- **读不到就不转**：脚本没加载、图片跨域且没有 CORS 时，显示原图。
+- **动效**：换内容时字从左到右落定，时长是 `--motion-slow`；会动的画面离开视口或页面隐藏时停止绘制；开启减少动态时只显示最终画面。
+- 字符画面是图片的另一种呈现或装饰，不承载必须读到的文字。
