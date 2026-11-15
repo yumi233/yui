@@ -61,6 +61,7 @@ const pick = (option, width) => (typeof option === "function" ? option(width) : 
  * options.settle  false to show a new source at once instead of letting the type fall into place
  * options.paint   ({ cols, rows, time, density, value, tone }) => void, called every frame for a moving field. It sets
  *                 value (0–1) and tone (0 quiet, 1 ink, 2 accent) for every cell; density is what the source gave.
+ * options.paused  true to hold a moving field still: nothing is drawn until set() or draw() is called
  */
 export function mountAscii(host, options = {}) {
   const existing = mounted.get(host);
@@ -68,7 +69,7 @@ export function mountAscii(host, options = {}) {
     existing.set(options);
     return existing;
   }
-  const state = { source: host.querySelector(":scope > img"), ramp: host.dataset.ramp || "han", ink: "", cell: Number(host.dataset.cell) || 0, rows: 0, ratio: 0, gamma: 0.75, settle: true, paint: null, ...options };
+  const state = { source: host.querySelector(":scope > img"), ramp: host.dataset.ramp || "han", ink: "", cell: Number(host.dataset.cell) || 0, rows: 0, ratio: 0, gamma: 0.75, settle: true, paint: null, paused: false, ...options };
   const canvas = document.createElement("canvas");
   canvas.setAttribute("aria-hidden", "true");
   host.append(canvas);
@@ -197,7 +198,7 @@ export function mountAscii(host, options = {}) {
   }
 
   // Frames run only while type is settling or a paint function is moving the field, and only on screen.
-  const live = () => visible && !document.hidden && !reduced?.matches && (settling || Boolean(state.paint));
+  const live = () => visible && !document.hidden && !reduced?.matches && (settling || (Boolean(state.paint) && !state.paused));
   function frame(now) {
     raf = 0;
     if (now - last >= FRAME) {
