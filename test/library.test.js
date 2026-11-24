@@ -22,7 +22,19 @@ test("every class on the library page exists in components.css", () => {
 test("tokens define both themes and the accent the rules tell projects to override", () => {
   const tokens = read("dist/tokens.css");
   assert.match(tokens, /\[data-theme="night"\]/);
-  for (const name of ["--olive", "--sage", "--sage-soft", "--paper", "--surface", "--ink"]) assert.equal((tokens.match(new RegExp(`${name}:`, "g")) || []).length >= 2, true, name);
+  for (const name of ["--olive", "--sage", "--sage-soft", "--paper", "--surface", "--ink", "--art-paper", "--focus-ring", "--scrim-paper", "--btn-grad-top", "--btn-grad-bottom"]) {
+    assert.equal((tokens.match(new RegExp(`${name}:`, "g")) || []).length >= 2, true, name);
+  }
+});
+
+test("night button polarity, input focus ring and mobile dialog sheet stay intact", () => {
+  const css = read("dist/components.css");
+  assert.doesNotMatch(css, /\[data-theme="night"\]\s*:where\(\.yui-button\[data-variant="secondary"\]\)/);
+  assert.match(css, /\[data-theme="night"\]\s*\.yui-button\[data-variant="secondary"\]/);
+  assert.match(css, /\.yui-button\[data-variant="primary"\][\s\S]*?var\(--btn-grad-top\)[\s\S]*?var\(--btn-grad-bottom\)/);
+  assert.match(css, /\[data-theme="night"\]\s*\.yui-button\[data-variant="primary"\]/);
+  assert.match(css, /\.yui-input:focus-visible,\s*\.yui-textarea:focus-visible\s*\{[\s\S]*?box-shadow:\s*var\(--focus-ring\);[\s\S]*?outline:\s*none;/);
+  assert.match(css, /@media\s*\(max-width:\s*720px\)\s*\{[\s\S]*?dialog\.yui-dialog\s*\{[\s\S]*?border-radius:/);
 });
 
 test("scripts are self-contained ES modules", () => {

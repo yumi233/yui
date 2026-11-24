@@ -252,7 +252,7 @@
   import "./dist/select.js";
   import { mountAscii, fieldOf } from "./dist/ascii.js";
   const html = document.documentElement;
-  const tokens = [["--paper", "页面底"], ["--surface", "卡片"], ["--line", "边框"], ["--ink", "正文"], ["--sub", "次要"], ["--muted-bg", "凹槽"], ["--olive", "唯一强调"], ["--sage", "辅助绿"], ["--sage-soft", "浅绿底"], ["--btn", "主按钮"], ["--danger", "危险"]];
+  const tokens = [["--paper", "页面底"], ["--surface", "卡片"], ["--art-paper", "画纸底"], ["--line", "边框"], ["--ink", "正文"], ["--sub", "次要"], ["--muted-bg", "凹槽"], ["--olive", "唯一强调"], ["--sage", "辅助绿"], ["--sage-soft", "浅绿底"], ["--btn", "主按钮"], ["--danger", "危险"]];
   const box = document.getElementById("swatches");
   const paint = () => { const css = getComputedStyle(html); box.innerHTML = tokens.map(([name, role]) => `<div class="swatch"><i style="background:var(${name})"></i><b>${name}</b><span>${role}</span><span>${css.getPropertyValue(name).trim()}</span></div>`).join(""); };
   paint();

@@ -23,9 +23,10 @@
 
 | 类别 | 变量 | 用法 |
 | --- | --- | --- |
-| 颜色 | `--paper` `--surface` `--line` `--ink` `--sub` `--muted-bg` | 页面底、卡片与输入、边框、正文、次要文字、凹槽与悬停底 |
+| 颜色 | `--paper` `--surface` `--art-paper` `--line` `--ink` `--sub` `--muted-bg` | 页面底、卡片与输入、字符画纸底、边框、正文、次要文字、凹槽与悬停底 |
 | 强调 | `--olive` `--sage` `--sage-soft` | 编号、链接、选中、标题第二行、圆箭头；浅绿底只用于提示块和建议 |
-| 按钮 | `--btn` `--btn-ink` | 主按钮渐变黑；夜间为浅色 |
+| 按钮 | `--btn` `--btn-ink` `--btn-grad-top` `--btn-grad-bottom` | 主按钮渐变黑；夜间为浅色 |
+| 焦点与托底 | `--focus-ring` `--scrim-paper` | 输入框聚焦光晕；窄屏浅纸渐变托底 |
 | 状态 | `--danger` 及 `data-tone` | 只表达状态，不做装饰 |
 | 字体 | `--font-sans` 标题与正文，`--font-mono` 数字、版本号、编号、阶段名 | 标题用无衬线，不用宋体 |
 | 字号 | 76 hero · 40 section · 20 card · 15 body · 13 mono | 首页刻度；工作台用 `--text-xs…xl` |
